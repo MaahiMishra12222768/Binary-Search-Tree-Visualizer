@@ -7,7 +7,7 @@ let delay = 500;
 let isRunningSomething = false;
 let willDelete = false;
 
-let refreshTreeStructure = (currValue, isInserting) => {
+t refreshTreeStructure = (currValue, isInserting) => {
     // Clean up existing SVG first
     let svg = document.querySelectorAll("svg");
     if (svg.length) {
@@ -28,23 +28,52 @@ let refreshTreeStructure = (currValue, isInserting) => {
     if (tree !== undefined) {
         plot(tree, currValue, isInserting);
         
-        // After plotting, adjust the SVG to center the tree
+        // After plotting, make more significant adjustments to the SVG
         setTimeout(() => {
             const svg = document.querySelector("svg");
             if (svg) {
-                // Set SVG to take full width
-                svg.style.width = "100%";
+                // Make SVG responsive
+                svg.setAttribute("width", "100%");
+                svg.removeAttribute("height");
+                svg.style.display = "block";
                 
-                // Find the main group that contains the tree
-                const treeGroup = svg.querySelector("g");
-                if (treeGroup) {
-                    // Add translation to center the tree
-                    const currentTransform = treeGroup.getAttribute("transform") || "";
-                    // Add 250px to the X translation to move tree more to center
-                    treeGroup.setAttribute("transform", `translate(250, 0) ${currentTransform}`);
+                // Find all node groups and adjust their positions
+                const nodeGroups = svg.querySelectorAll("g.node");
+                if (nodeGroups.length > 0) {
+                    let minX = Infinity;
+                    let maxX = -Infinity;
+                    
+                    // Find the leftmost and rightmost node positions
+                    nodeGroups.forEach(node => {
+                        const transform = node.getAttribute("transform");
+                        if (transform) {
+                            const match = transform.match(/translate\(([^,]+),([^)]+)\)/);
+                            if (match) {
+                                const x = parseFloat(match[1]);
+                                minX = Math.min(minX, x);
+                                maxX = Math.max(maxX, x);
+                            }
+                        }
+                    });
+                    
+                    // Calculate center offset
+                    const treeWidth = maxX - minX;
+                    const viewBoxWidth = parseFloat(svg.getAttribute("width") || 800);
+                    const centerOffset = (viewBoxWidth - treeWidth) / 2 - minX;
+                    
+                    // Apply offset to the main group
+                    const mainGroup = svg.querySelector("g");
+                    if (mainGroup) {
+                        mainGroup.setAttribute("transform", `translate(${centerOffset}, 0)`);
+                    }
                 }
+                
+                // Alternative approach: Set the viewBox to center the tree
+                const bbox = svg.getBBox();
+                const padding = 50;
+                svg.setAttribute("viewBox", `${bbox.x - padding} ${bbox.y - padding} ${bbox.width + padding*2} ${bbox.height + padding*2}`);
             }
-        }, 50); // Small delay to ensure SVG is rendered
+        }, 100); // Give more time for SVG to fully render
     }
 }
 
