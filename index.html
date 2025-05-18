@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
     <link rel="icon" type="image/x-icon" href="favicon.png" />
-    <title>Document</title>
+    <title>BST Visualizer | Interactive Binary Search Tree</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script
       src="https://kit.fontawesome.com/e8fbb55064.js"
@@ -17,14 +15,14 @@
   </head>
   <body>
     <nav class="navbar">
-      <header class="heading">Binary Search Tree Visulizer</header>
+      <header class="heading">Binary Search Tree Visualizer</header>
     </nav>
     <div class="form-container">
       <form action="" id="form1">
         <input
           type="text"
           id="insert"
-          placeholder="Insert"
+          placeholder="Insert Value"
           inputmode="numeric"
         />
         <label for="insert">
@@ -37,7 +35,7 @@
         <input
           type="text"
           id="remove"
-          placeholder="Remove"
+          placeholder="Remove Value"
           inputmode="numeric"
         />
         <label for="remove">
@@ -46,13 +44,14 @@
         ></label>
       </form>
       <form action="" id="form3">
-        <input type="text" id="find" placeholder="Find" inputmode="numeric" />
-        <label for="remove">
+        <input type="text" id="find" placeholder="Find Value" inputmode="numeric" />
+        <label for="find">
           <button type="submit" id="find-btn" class="btn">
             <i class="fa-solid fa-search"></i></button
         ></label>
       </form>
-      <label for="animation-delay">Animation delay</label>
+      
+      <label for="animation-delay">Animation Speed</label>
       <input
         type="range"
         min="50"
@@ -60,17 +59,25 @@
         value="500"
         id="animation-delay"
       />
-
+      
       <div class="traversals">
-        <button id="pre" class="traversal btn" type="button">Preorder</button>
-        <button id="post" class="traversal btn" type="button">Postorder</button>
-        <button id="in" class="traversal btn" type="button">Inorder</button>
-        <button id="level" class="traversal btn" type="button">Level order</button>
+        <button id="pre" class="traversal btn" type="button">
+          <i class="fa-solid fa-diagram-project"></i> Preorder
+        </button>
+        <button id="post" class="traversal btn" type="button">
+          <i class="fa-solid fa-code-branch"></i> Postorder
+        </button>
+        <button id="in" class="traversal btn" type="button">
+          <i class="fa-solid fa-arrow-right-arrow-left"></i> Inorder
+        </button>
+        <button id="level" class="traversal btn" type="button">
+          <i class="fa-solid fa-layer-group"></i> Level order
+        </button>
       </div>
-
+      
       <div class="box">
-        <h4 id="message-heading"></h4>
-        <div id="message"></div>
+        <h4 id="message-heading">Binary Search Tree</h4>
+        <div id="message">Insert values to build your tree</div>
       </div>
     </div>
   </body>
