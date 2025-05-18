@@ -8,21 +8,33 @@ let isRunningSomething = false;
 let willDelete = false;
 
 let refreshTreeStructure = (currValue, isInserting) => {
-    if (isInserting) {
-        isInserting = !findInTree(currValue);
-    }
+    // Clean up existing SVG first
     let svg = document.querySelectorAll("svg");
     if (svg.length) {
         svg[0].remove();
     }
+    
+    // If isInserting is provided, check if value exists in tree already
+    if (isInserting !== undefined) {
+        if (isInserting) {
+            isInserting = !findInTree(currValue);
+        }
+    }
+    
+    // Get the tree data
     tree = bst.getTree(bst.getRoot());
 
-    if (tree != undefined)
+    // Only attempt to plot if the tree exists
+    if (tree !== undefined) {
         plot(tree, currValue, isInserting);
+    }
 }
 
-bst.insert(parseInt(Math.random()*100));
-refreshTreeStructure();
+// Initialize with a random value
+let initialValue = parseInt(Math.random()*100);
+bst.insert(initialValue);
+// Explicitly pass the initial value to refreshTreeStructure so it gets highlighted
+refreshTreeStructure(initialValue, true);
 
 const find = (key, root) => {
     return new Promise((resolve) => {
