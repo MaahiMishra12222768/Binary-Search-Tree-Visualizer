@@ -1,19 +1,5 @@
 import { plot } from "./d3.js";
 import { BST } from "./BST.js";
-// Add custom CSS for tree centering - adjust the 350px value as needed
-document.addEventListener("DOMContentLoaded", function() {
-    const style = document.createElement('style');
-    style.textContent = `
-        svg {
-            width: 100% !important;
-            height: auto !important;
-        }
-        svg g {
-            transform: translateX(350px);
-        }
-    `;
-    document.head.appendChild(style);
-});
 
 var bst = new BST();
 var tree;
@@ -21,7 +7,7 @@ let delay = 500;
 let isRunningSomething = false;
 let willDelete = false;
 
-t refreshTreeStructure = (currValue, isInserting) => {
+let refreshTreeStructure = (currValue, isInserting) => {
     // Clean up existing SVG first
     let svg = document.querySelectorAll("svg");
     if (svg.length) {
@@ -41,53 +27,6 @@ t refreshTreeStructure = (currValue, isInserting) => {
     // Only attempt to plot if the tree exists
     if (tree !== undefined) {
         plot(tree, currValue, isInserting);
-        
-        // After plotting, make more significant adjustments to the SVG
-        setTimeout(() => {
-            const svg = document.querySelector("svg");
-            if (svg) {
-                // Make SVG responsive
-                svg.setAttribute("width", "100%");
-                svg.removeAttribute("height");
-                svg.style.display = "block";
-                
-                // Find all node groups and adjust their positions
-                const nodeGroups = svg.querySelectorAll("g.node");
-                if (nodeGroups.length > 0) {
-                    let minX = Infinity;
-                    let maxX = -Infinity;
-                    
-                    // Find the leftmost and rightmost node positions
-                    nodeGroups.forEach(node => {
-                        const transform = node.getAttribute("transform");
-                        if (transform) {
-                            const match = transform.match(/translate\(([^,]+),([^)]+)\)/);
-                            if (match) {
-                                const x = parseFloat(match[1]);
-                                minX = Math.min(minX, x);
-                                maxX = Math.max(maxX, x);
-                            }
-                        }
-                    });
-                    
-                    // Calculate center offset
-                    const treeWidth = maxX - minX;
-                    const viewBoxWidth = parseFloat(svg.getAttribute("width") || 800);
-                    const centerOffset = (viewBoxWidth - treeWidth) / 2 - minX;
-                    
-                    // Apply offset to the main group
-                    const mainGroup = svg.querySelector("g");
-                    if (mainGroup) {
-                        mainGroup.setAttribute("transform", `translate(${centerOffset}, 0)`);
-                    }
-                }
-                
-                // Alternative approach: Set the viewBox to center the tree
-                const bbox = svg.getBBox();
-                const padding = 50;
-                svg.setAttribute("viewBox", `${bbox.x - padding} ${bbox.y - padding} ${bbox.width + padding*2} ${bbox.height + padding*2}`);
-            }
-        }, 100); // Give more time for SVG to fully render
     }
 }
 
