@@ -27,6 +27,24 @@ let refreshTreeStructure = (currValue, isInserting) => {
     // Only attempt to plot if the tree exists
     if (tree !== undefined) {
         plot(tree, currValue, isInserting);
+        
+        // After plotting, adjust the SVG to center the tree
+        setTimeout(() => {
+            const svg = document.querySelector("svg");
+            if (svg) {
+                // Set SVG to take full width
+                svg.style.width = "100%";
+                
+                // Find the main group that contains the tree
+                const treeGroup = svg.querySelector("g");
+                if (treeGroup) {
+                    // Add translation to center the tree
+                    const currentTransform = treeGroup.getAttribute("transform") || "";
+                    // Add 250px to the X translation to move tree more to center
+                    treeGroup.setAttribute("transform", `translate(250, 0) ${currentTransform}`);
+                }
+            }
+        }, 50); // Small delay to ensure SVG is rendered
     }
 }
 
