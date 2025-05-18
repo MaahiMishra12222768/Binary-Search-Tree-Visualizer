@@ -1,5 +1,19 @@
 import { plot } from "./d3.js";
 import { BST } from "./BST.js";
+// Add custom CSS for tree centering - adjust the 350px value as needed
+document.addEventListener("DOMContentLoaded", function() {
+    const style = document.createElement('style');
+    style.textContent = `
+        svg {
+            width: 100% !important;
+            height: auto !important;
+        }
+        svg g {
+            transform: translateX(350px);
+        }
+    `;
+    document.head.appendChild(style);
+});
 
 var bst = new BST();
 var tree;
